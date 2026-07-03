@@ -1,2 +1,10 @@
-# shraddha-s-creation
-E-commerce site for handmade jewellery. Payment in INR. Mobile first.
+# Shraddha's Creation
+
+Generated with NovaSpark AI Workspace.
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
