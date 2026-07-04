@@ -471,4 +471,4 @@ const styles = {
     fontSize: '16px',
     fontWeight: '600',
     border: 'none',
-    borderRadius: '
+    borderRadius: '8px',
