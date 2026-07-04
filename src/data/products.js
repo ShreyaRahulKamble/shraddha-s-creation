@@ -331,4 +331,14 @@ const products = [
     description: "Simple gold-plated hoop earrings. Versatile and comfortable for daily wear.",
     images: [
       "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80",
-      "https://images.unsplash.com/
+      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
+    ],
+    inStock: true,
+    featured: false,
+    material: "Gold Plated",
+    color: "Gold",
+    weight: "5g"
+  }
+];
+
+export default products;
