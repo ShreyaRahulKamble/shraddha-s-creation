@@ -472,3 +472,44 @@ const styles = {
     fontWeight: '600',
     border: 'none',
     borderRadius: '8px',
+    width: '100%',
+    cursor: 'pointer',
+    marginTop: '20px',
+    transition: 'background-color 0.3s'
+  },
+  payButtonDisabled: {
+    backgroundColor: '#ccc',
+    cursor: 'not-allowed'
+  },
+  secureText: {
+    fontSize: '13px',
+    color: '#777',
+    textAlign: 'center',
+    marginTop: '12px'
+  },
+  emptyCart: {
+    textAlign: 'center',
+    padding: '60px 20px'
+  },
+  emptyTitle: {
+    fontSize: '24px',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '12px'
+  },
+  emptyText: {
+    fontSize: '15px',
+    color: '#777',
+    marginBottom: '24px'
+  },
+  shopButton: {
+    backgroundColor: '#d35400',
+    color: '#fff',
+    padding: '14px 28px',
+    fontSize: '15px',
+    fontWeight: '600',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer'
+  }
+};
