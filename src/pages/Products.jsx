@@ -1,58 +1,107 @@
+// src/pages/Products.jsx
 import { useState, useMemo } from 'react';
-import { products } from '../data/products';
+import { useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { products } from '../data/products';
 
-export default function Products() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
+  const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const categories = ['all', ...new Set(products.map(p => p.category))];
+  const priceRanges = [
+    { value: 'all', label: 'All Prices' },
+    { value: '0-500', label: 'Under ₹500' },
+    { value: '500-1000', label: '₹500 - ₹1000' },
+    { value: '1000-2000', label: '₹1000 - ₹2000' },
+    { value: '2000+', label: 'Above ₹2000' }
+  ];
 
-  const filteredAndSortedProducts = useMemo(() => {
-    let result = [...products];
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
 
     if (selectedCategory !== 'all') {
-      result = result.filter(p => p.category === selectedCategory);
+      filtered = filtered.filter(p => p.category === selectedCategory);
     }
 
-    result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+    if (priceRange !== 'all') {
+      const [min, max] = priceRange.split('-').map(v => v.replace('+', ''));
+      filtered = filtered.filter(p => {
+        if (max) {
+          return p.price >= Number(min) && p.price <= Number(max);
+        } else {
+          return p.price >= Number(min);
+        }
+      });
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.description.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+    }
 
     switch (sortBy) {
       case 'price-low':
-        result.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-high':
-        result.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'name':
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
         break;
     }
 
-    return result;
-  }, [selectedCategory, sortBy, priceRange]);
+    return filtered;
+  }, [selectedCategory, priceRange, sortBy, searchQuery]);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    if (category === 'all') {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', category);
+    }
+    setSearchParams(searchParams);
+  };
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <h1 style={styles.title}>Our Collection</h1>
-        <p style={styles.subtitle}>Handcrafted with love, designed for you</p>
+        <p style={styles.subtitle}>Handcrafted jewellery made with love</p>
+      </div>
+
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={styles.searchInput}
+        />
       </div>
 
       <div style={styles.filtersContainer}>
-        <div style={styles.filterSection}>
+        <div style={styles.filterGroup}>
           <label style={styles.filterLabel}>Category</label>
-          <div style={styles.categoryButtons}>
+          <div style={styles.categoryChips}>
             {categories.map(cat => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 style={{
-                  ...styles.categoryButton,
-                  ...(selectedCategory === cat ? styles.categoryButtonActive : {})
+                  ...styles.chip,
+                  ...(selectedCategory === cat ? styles.chipActive : {})
                 }}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -63,8 +112,25 @@ export default function Products() {
 
         <div style={styles.filterRow}>
           <div style={styles.filterGroup}>
-            <label style={styles.filterLabel}>Sort By</label>
+            <label style={styles.filterLabel} htmlFor="priceRange">Price Range</label>
             <select
+              id="priceRange"
+              value={priceRange}
+              onChange={(e) => setPriceRange(e.target.value)}
+              style={styles.select}
+            >
+              {priceRanges.map(range => (
+                <option key={range.value} value={range.value}>
+                  {range.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={styles.filterGroup}>
+            <label style={styles.filterLabel} htmlFor="sortBy">Sort By</label>
+            <select
+              id="sortBy"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               style={styles.select}
@@ -75,195 +141,163 @@ export default function Products() {
               <option value="name">Name: A to Z</option>
             </select>
           </div>
-
-          <div style={styles.filterGroup}>
-            <label style={styles.filterLabel}>
-              Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
-            </label>
-            <div style={styles.rangeInputs}>
-              <input
-                type="number"
-                value={priceRange[0]}
-                onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
-                style={styles.rangeInput}
-                placeholder="Min"
-                min="0"
-              />
-              <span style={styles.rangeSeparator}>-</span>
-              <input
-                type="number"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
-                style={styles.rangeInput}
-                placeholder="Max"
-                min="0"
-              />
-            </div>
-          </div>
         </div>
       </div>
 
       <div style={styles.resultsInfo}>
         <p style={styles.resultsText}>
-          Showing {filteredAndSortedProducts.length} {filteredAndSortedProducts.length === 1 ? 'product' : 'products'}
+          {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
         </p>
       </div>
 
-      {filteredAndSortedProducts.length === 0 ? (
+      {filteredProducts.length > 0 ? (
+        <div style={styles.productsGrid}>
+          {filteredProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
         <div style={styles.noResults}>
-          <p style={styles.noResultsText}>No products found matching your criteria</p>
+          <p style={styles.noResultsText}>No products found matching your criteria.</p>
           <button
             onClick={() => {
               setSelectedCategory('all');
-              setPriceRange([0, 10000]);
-              setSortBy('featured');
+              setPriceRange('all');
+              setSearchQuery('');
+              searchParams.delete('category');
+              setSearchParams(searchParams);
             }}
             style={styles.resetButton}
           >
-            Reset Filters
+            Clear All Filters
           </button>
-        </div>
-      ) : (
-        <div style={styles.productsGrid}>
-          {filteredAndSortedProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
         </div>
       )}
     </div>
   );
-}
+};
 
 const styles = {
   container: {
     maxWidth: '1200px',
     margin: '0 auto',
     padding: '20px',
-    minHeight: '60vh'
   },
   header: {
     textAlign: 'center',
-    marginBottom: '30px'
+    marginBottom: '30px',
   },
   title: {
     fontSize: '2rem',
-    fontWeight: 'bold',
-    color: '#2d3748',
-    marginBottom: '8px'
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: '8px',
   },
   subtitle: {
     fontSize: '1rem',
-    color: '#718096',
-    marginTop: '0'
+    color: '#7f8c8d',
+  },
+  searchContainer: {
+    marginBottom: '24px',
+  },
+  searchInput: {
+    width: '100%',
+    padding: '12px 16px',
+    fontSize: '1rem',
+    border: '2px solid #e8e8e8',
+    borderRadius: '8px',
+    outline: 'none',
+    transition: 'border-color 0.3s',
   },
   filtersContainer: {
-    backgroundColor: '#f7fafc',
+    backgroundColor: '#f8f9fa',
     padding: '20px',
     borderRadius: '12px',
-    marginBottom: '30px',
-    border: '1px solid #e2e8f0'
+    marginBottom: '24px',
   },
-  filterSection: {
-    marginBottom: '20px'
+  filterGroup: {
+    marginBottom: '16px',
   },
   filterLabel: {
     display: 'block',
-    fontSize: '0.875rem',
+    fontSize: '0.9rem',
     fontWeight: '600',
-    color: '#4a5568',
-    marginBottom: '8px'
+    color: '#2c3e50',
+    marginBottom: '8px',
   },
-  categoryButtons: {
+  categoryChips: {
     display: 'flex',
     flexWrap: 'wrap',
-    gap: '8px'
+    gap: '8px',
   },
-  categoryButton: {
+  chip: {
     padding: '8px 16px',
-    border: '1px solid #cbd5e0',
+    border: '2px solid #e8e8e8',
     borderRadius: '20px',
     backgroundColor: '#fff',
-    color: '#4a5568',
-    fontSize: '0.875rem',
+    color: '#2c3e50',
+    fontSize: '0.9rem',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-    fontFamily: 'inherit'
+    transition: 'all 0.3s',
+    fontWeight: '500',
   },
-  categoryButtonActive: {
-    backgroundColor: '#c53030',
+  chipActive: {
+    backgroundColor: '#d4af37',
     color: '#fff',
-    borderColor: '#c53030'
+    borderColor: '#d4af37',
   },
   filterRow: {
     display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '16px'
-  },
-  filterGroup: {
-    display: 'flex',
-    flexDirection: 'column'
+    gridTemplateColumns: '1fr 1fr',
+    gap: '16px',
   },
   select: {
-    padding: '10px',
-    border: '1px solid #cbd5e0',
+    width: '100%',
+    padding: '10px 12px',
+    fontSize: '0.95rem',
+    border: '2px solid #e8e8e8',
     borderRadius: '8px',
-    fontSize: '0.875rem',
     backgroundColor: '#fff',
-    color: '#2d3748',
+    color: '#2c3e50',
     cursor: 'pointer',
-    fontFamily: 'inherit'
-  },
-  rangeInputs: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  },
-  rangeInput: {
-    flex: 1,
-    padding: '10px',
-    border: '1px solid #cbd5e0',
-    borderRadius: '8px',
-    fontSize: '0.875rem',
-    fontFamily: 'inherit'
-  },
-  rangeSeparator: {
-    color: '#718096',
-    fontSize: '0.875rem'
+    outline: 'none',
   },
   resultsInfo: {
-    marginBottom: '20px'
+    marginBottom: '20px',
+    paddingBottom: '12px',
+    borderBottom: '1px solid #e8e8e8',
   },
   resultsText: {
-    fontSize: '0.875rem',
-    color: '#718096',
-    margin: '0'
+    fontSize: '0.95rem',
+    color: '#7f8c8d',
+    fontWeight: '500',
   },
   productsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-    gap: '20px',
-    marginBottom: '40px'
+    gap: '24px',
+    marginBottom: '40px',
   },
   noResults: {
     textAlign: 'center',
     padding: '60px 20px',
-    backgroundColor: '#f7fafc',
-    borderRadius: '12px'
   },
   noResultsText: {
-    fontSize: '1.125rem',
-    color: '#4a5568',
-    marginBottom: '20px'
+    fontSize: '1.1rem',
+    color: '#7f8c8d',
+    marginBottom: '20px',
   },
   resetButton: {
     padding: '12px 24px',
-    backgroundColor: '#c53030',
+    backgroundColor: '#d4af37',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',
     fontSize: '1rem',
+    fontWeight: '600',
     cursor: 'pointer',
-    fontFamily: 'inherit',
-    transition: 'background-color 0.2s'
-  }
+    transition: 'background-color 0.3s',
+  },
 };
+
+export default Products;

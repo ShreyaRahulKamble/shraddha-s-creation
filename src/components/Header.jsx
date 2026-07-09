@@ -1,31 +1,24 @@
+// src/components/Header.jsx
 import { Link } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { CartContext } from '../context/CartContext';
+import { useCart } from '../context/CartContext';
+import { useState } from 'react';
 
 export default function Header() {
-  const { cart } = useContext(CartContext);
+  const { cart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
   return (
     <header style={styles.header}>
       <div style={styles.container}>
-        <Link to="/" style={styles.logo} onClick={closeMenu}>
+        <Link to="/" style={styles.logo}>
           <span style={styles.logoText}>Shraddha's Creation</span>
         </Link>
 
         <button 
-          style={styles.menuButton} 
-          onClick={toggleMenu}
+          style={styles.menuButton}
+          onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
           {menuOpen ? '✕' : '☰'}
@@ -35,23 +28,31 @@ export default function Header() {
           ...styles.nav,
           ...(menuOpen ? styles.navOpen : {})
         }}>
-          <Link to="/" style={styles.navLink} onClick={closeMenu}>
+          <Link 
+            to="/" 
+            style={styles.navLink}
+            onClick={() => setMenuOpen(false)}
+          >
             Home
           </Link>
-          <Link to="/products" style={styles.navLink} onClick={closeMenu}>
+          <Link 
+            to="/products" 
+            style={styles.navLink}
+            onClick={() => setMenuOpen(false)}
+          >
             Products
           </Link>
-          <Link to="/cart" style={styles.navLink} onClick={closeMenu}>
-            Cart
+          <Link 
+            to="/cart" 
+            style={styles.cartLink}
+            onClick={() => setMenuOpen(false)}
+          >
+            <span style={styles.cartIcon}>🛒</span>
+            {cartItemCount > 0 && (
+              <span style={styles.cartBadge}>{cartItemCount}</span>
+            )}
           </Link>
         </nav>
-
-        <Link to="/cart" style={styles.cartIcon} onClick={closeMenu}>
-          <span style={styles.cartIconText}>🛒</span>
-          {cartItemCount > 0 && (
-            <span style={styles.badge}>{cartItemCount}</span>
-          )}
-        </Link>
       </div>
     </header>
   );
@@ -59,88 +60,93 @@ export default function Header() {
 
 const styles = {
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    width: '100%',
+    borderBottom: '1px solid #e5e7eb',
   },
   container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '1rem',
     maxWidth: '1200px',
     margin: '0 auto',
+    padding: '1rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     position: 'relative',
   },
   logo: {
     textDecoration: 'none',
-    color: '#333',
+    color: '#111827',
     fontWeight: 'bold',
     fontSize: '1.25rem',
-    zIndex: 1001,
+    display: 'flex',
+    alignItems: 'center',
   },
   logoText: {
-    background: 'linear-gradient(135deg, #d4a574 0%, #c4915f 100%)',
+    background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
   },
   menuButton: {
     display: 'block',
-    backgroundColor: 'transparent',
-    border: 'none',
     fontSize: '1.5rem',
+    background: 'none',
+    border: 'none',
     cursor: 'pointer',
     padding: '0.5rem',
-    color: '#333',
-    zIndex: 1001,
+    color: '#111827',
   },
   nav: {
-    display: 'none',
-    flexDirection: 'column',
     position: 'absolute',
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    padding: '1rem',
-    gap: '1rem',
+    backgroundColor: '#ffffff',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0',
+    maxHeight: '0',
+    overflow: 'hidden',
+    transition: 'max-height 0.3s ease',
+    borderBottom: '1px solid #e5e7eb',
   },
   navOpen: {
-    display: 'flex',
+    maxHeight: '300px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
   navLink: {
     textDecoration: 'none',
-    color: '#333',
+    color: '#374151',
     fontSize: '1rem',
-    padding: '0.5rem',
-    borderRadius: '4px',
+    padding: '1rem',
+    borderBottom: '1px solid #f3f4f6',
     transition: 'background-color 0.2s',
   },
-  cartIcon: {
-    position: 'relative',
+  cartLink: {
     textDecoration: 'none',
-    fontSize: '1.5rem',
+    color: '#374151',
+    fontSize: '1rem',
+    padding: '1rem',
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
-    zIndex: 1001,
+    gap: '0.5rem',
   },
-  cartIconText: {
-    filter: 'grayscale(100%)',
+  cartIcon: {
+    fontSize: '1.5rem',
   },
-  badge: {
+  cartBadge: {
     position: 'absolute',
-    top: '-8px',
-    right: '-8px',
-    backgroundColor: '#d4a574',
-    color: '#fff',
+    top: '0.5rem',
+    left: '1.75rem',
+    backgroundColor: '#ec4899',
+    color: '#ffffff',
     borderRadius: '50%',
-    width: '20px',
-    height: '20px',
+    width: '1.25rem',
+    height: '1.25rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -149,13 +155,21 @@ const styles = {
   },
 };
 
-if (typeof window !== 'undefined' && window.innerWidth >= 768) {
-  styles.menuButton.display = 'none';
-  styles.nav.display = 'flex';
-  styles.nav.flexDirection = 'row';
-  styles.nav.position = 'static';
-  styles.nav.boxShadow = 'none';
-  styles.nav.padding = '0';
-  styles.nav.gap = '2rem';
-  styles.container.justifyContent = 'space-between';
+if (typeof window !== 'undefined') {
+  const mediaQuery = window.matchMedia('(min-width: 768px)');
+  
+  if (mediaQuery.matches) {
+    styles.menuButton.display = 'none';
+    styles.nav.position = 'static';
+    styles.nav.flexDirection = 'row';
+    styles.nav.maxHeight = 'none';
+    styles.nav.overflow = 'visible';
+    styles.nav.borderBottom = 'none';
+    styles.nav.gap = '2rem';
+    styles.navLink.padding = '0.5rem 0';
+    styles.navLink.borderBottom = 'none';
+    styles.cartLink.padding = '0.5rem 0';
+    styles.cartBadge.top = '-0.5rem';
+    styles.cartBadge.left = '1.5rem';
+  }
 }

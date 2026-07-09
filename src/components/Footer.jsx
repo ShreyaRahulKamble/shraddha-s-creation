@@ -1,8 +1,8 @@
-import React from 'react';
+// src/components/Footer.jsx
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
-const Footer = () => {
+export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -13,17 +13,17 @@ const Footer = () => {
           <div style={styles.section}>
             <h3 style={styles.heading}>Shraddha's Creation</h3>
             <p style={styles.text}>
-              Handcrafted jewellery made with love and passion. Each piece is unique and tells its own story.
+              Handcrafted jewellery made with love and care. Each piece is unique and designed to bring elegance to your style.
             </p>
             <div style={styles.socialLinks}>
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={styles.socialIcon} aria-label="Facebook">
-                <Facebook size={20} />
+                <FaFacebook size={24} />
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={styles.socialIcon} aria-label="Instagram">
-                <Instagram size={20} />
+                <FaInstagram size={24} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={styles.socialIcon} aria-label="Twitter">
-                <Twitter size={20} />
+              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" style={styles.socialIcon} aria-label="WhatsApp">
+                <FaWhatsapp size={24} />
               </a>
             </div>
           </div>
@@ -36,32 +36,32 @@ const Footer = () => {
                 <Link to="/" style={styles.link}>Home</Link>
               </li>
               <li style={styles.linkItem}>
-                <Link to="/products" style={styles.link}>Products</Link>
+                <Link to="/products" style={styles.link}>Shop</Link>
               </li>
               <li style={styles.linkItem}>
                 <Link to="/cart" style={styles.link}>Cart</Link>
               </li>
               <li style={styles.linkItem}>
-                <Link to="/about" style={styles.link}>About Us</Link>
+                <a href="#about" style={styles.link}>About Us</a>
               </li>
             </ul>
           </div>
 
-          {/* Policies */}
+          {/* Customer Service */}
           <div style={styles.section}>
-            <h3 style={styles.heading}>Policies</h3>
+            <h3 style={styles.heading}>Customer Service</h3>
             <ul style={styles.linkList}>
               <li style={styles.linkItem}>
-                <Link to="/privacy-policy" style={styles.link}>Privacy Policy</Link>
+                <a href="#shipping" style={styles.link}>Shipping Policy</a>
               </li>
               <li style={styles.linkItem}>
-                <Link to="/terms-conditions" style={styles.link}>Terms & Conditions</Link>
+                <a href="#returns" style={styles.link}>Returns & Exchanges</a>
               </li>
               <li style={styles.linkItem}>
-                <Link to="/shipping-policy" style={styles.link}>Shipping Policy</Link>
+                <a href="#faq" style={styles.link}>FAQ</a>
               </li>
               <li style={styles.linkItem}>
-                <Link to="/return-policy" style={styles.link}>Return Policy</Link>
+                <a href="#privacy" style={styles.link}>Privacy Policy</a>
               </li>
             </ul>
           </div>
@@ -69,30 +69,25 @@ const Footer = () => {
           {/* Contact Info */}
           <div style={styles.section}>
             <h3 style={styles.heading}>Contact Us</h3>
-            <ul style={styles.contactList}>
-              <li style={styles.contactItem}>
-                <Mail size={16} style={styles.contactIcon} />
-                <a href="mailto:contact@shraddhascreation.com" style={styles.link}>
-                  contact@shraddhascreation.com
-                </a>
-              </li>
-              <li style={styles.contactItem}>
-                <Phone size={16} style={styles.contactIcon} />
-                <a href="tel:+919876543210" style={styles.link}>
-                  +91 98765 43210
-                </a>
-              </li>
-              <li style={styles.contactItem}>
-                <MapPin size={16} style={styles.contactIcon} />
-                <span style={styles.text}>Mumbai, Maharashtra, India</span>
-              </li>
-            </ul>
+            <div style={styles.contactInfo}>
+              <div style={styles.contactItem}>
+                <FaPhone size={16} style={styles.contactIcon} />
+                <a href="tel:+919876543210" style={styles.link}>+91 98765 43210</a>
+              </div>
+              <div style={styles.contactItem}>
+                <FaEnvelope size={16} style={styles.contactIcon} />
+                <a href="mailto:info@shraddhascreation.com" style={styles.link}>info@shraddhascreation.com</a>
+              </div>
+              <div style={styles.contactItem}>
+                <FaMapMarkerAlt size={16} style={styles.contactIcon} />
+                <span style={styles.text}>Mumbai, India</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style={styles.divider}></div>
-
-        <div style={styles.bottom}>
+        {/* Bottom Bar */}
+        <div style={styles.bottomBar}>
           <p style={styles.copyright}>
             © {currentYear} Shraddha's Creation. All rights reserved.
           </p>
@@ -103,13 +98,13 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
+}
 
 const styles = {
   footer: {
-    backgroundColor: '#2c2c2c',
+    backgroundColor: '#1a1a1a',
     color: '#ffffff',
-    padding: '40px 20px 20px',
+    padding: '3rem 1rem 1rem',
     marginTop: 'auto',
   },
   container: {
@@ -118,126 +113,84 @@ const styles = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '30px',
-    marginBottom: '30px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '2rem',
+    marginBottom: '2rem',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '1rem',
   },
   heading: {
-    fontSize: '18px',
+    fontSize: '1.25rem',
     fontWeight: '600',
-    marginBottom: '15px',
+    marginBottom: '0.5rem',
     color: '#ffffff',
   },
   text: {
-    fontSize: '14px',
+    fontSize: '0.95rem',
     lineHeight: '1.6',
-    color: '#d1d1d1',
-    marginBottom: '10px',
+    color: '#cccccc',
   },
   socialLinks: {
     display: 'flex',
-    gap: '15px',
-    marginTop: '10px',
+    gap: '1rem',
+    marginTop: '0.5rem',
   },
   socialIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '36px',
-    height: '36px',
-    borderRadius: '50%',
-    backgroundColor: '#3c3c3c',
     color: '#ffffff',
-    textDecoration: 'none',
-    transition: 'background-color 0.3s ease',
+    transition: 'color 0.3s ease',
     cursor: 'pointer',
   },
   linkList: {
     listStyle: 'none',
     padding: 0,
     margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
   },
   linkItem: {
-    marginBottom: '10px',
+    margin: 0,
   },
   link: {
-    color: '#d1d1d1',
+    color: '#cccccc',
     textDecoration: 'none',
-    fontSize: '14px',
+    fontSize: '0.95rem',
     transition: 'color 0.3s ease',
   },
-  contactList: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
+  contactInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
   },
   contactItem: {
     display: 'flex',
-    alignItems: 'flex-start',
-    marginBottom: '12px',
-    fontSize: '14px',
-    color: '#d1d1d1',
+    alignItems: 'center',
+    gap: '0.75rem',
   },
   contactIcon: {
-    marginRight: '10px',
-    marginTop: '2px',
+    color: '#ffffff',
     flexShrink: 0,
   },
-  divider: {
-    height: '1px',
-    backgroundColor: '#4c4c4c',
-    margin: '30px 0 20px',
-  },
-  bottom: {
+  bottomBar: {
+    borderTop: '1px solid #333333',
+    paddingTop: '1.5rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '10px',
+    gap: '0.5rem',
     textAlign: 'center',
   },
   copyright: {
-    fontSize: '13px',
-    color: '#a1a1a1',
+    fontSize: '0.9rem',
+    color: '#999999',
     margin: 0,
   },
   madeWith: {
-    fontSize: '13px',
-    color: '#a1a1a1',
+    fontSize: '0.9rem',
+    color: '#999999',
     margin: 0,
   },
 };
-
-// Media queries applied via style injection
-if (typeof window !== 'undefined') {
-  const style = document.createElement('style');
-  style.textContent = `
-    @media (min-width: 768px) {
-      footer > div > div:first-child {
-        grid-template-columns: repeat(2, 1fr) !important;
-      }
-    }
-    @media (min-width: 1024px) {
-      footer > div > div:first-child {
-        grid-template-columns: repeat(4, 1fr) !important;
-      }
-      footer > div > div:last-of-type {
-        flex-direction: row !important;
-        justify-content: space-between !important;
-      }
-    }
-    footer a:hover {
-      color: #ffffff !important;
-    }
-    footer a[style*="socialIcon"]:hover,
-    footer > div > div:first-child > div:first-child a:hover {
-      background-color: #4c4c4c !important;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-export default Footer;

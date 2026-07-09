@@ -1,401 +1,179 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
-import { CartContext } from '../context/CartContext';
+// src/pages/ProductDetail.jsx
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
 
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useContext(CartContext);
-  
-  const product = products.find(p => p.id === parseInt(id));
+  const { addToCart } = useCart();
+  const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
 
-  if (!product) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.notFound}>
-          <h2>Product Not Found</h2>
-          <button onClick={() => navigate('/products')} style={styles.backButton}>
-            Back to Products
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const images = product.images || [product.image];
+  useEffect(() => {
+    const foundProduct = products.find(p => p.id === parseInt(id));
+    if (foundProduct) {
+      setProduct(foundProduct);
+    } else {
+      navigate('/products');
+    }
+  }, [id, navigate]);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2000);
-  };
-
-  const handleQuantityChange = (change) => {
-    const newQuantity = quantity + change;
-    if (newQuantity >= 1 && newQuantity <= 10) {
-      setQuantity(newQuantity);
+    if (product) {
+      addToCart(product, quantity);
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
     }
   };
 
-  return (
-    <div style={styles.container}>
-      <button onClick={() => navigate(-1)} style={styles.backLink}>
-        ← Back
-      </button>
+  const handleBuyNow = () => {
+    if (product) {
+      addToCart(product, quantity);
+      navigate('/checkout');
+    }
+  };
 
-      <div style={styles.productContainer}>
-        <div style={styles.imageSection}>
-          <div style={styles.mainImage}>
-            <img 
-              src={images[selectedImage]} 
-              alt={product.name}
-              style={styles.mainImageImg}
-            />
+  if (!product) {
+    return <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'400px',gap:'20px'}}><div style={{width:'50px',height:'50px',border:'5px solid #f3f3f3',borderTop:'5px solid #e91e63',borderRadius:'50%',animation:'spin 1s linear infinite'}}></div><p>Loading...</p></div>;
+  }
+
+  const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+  return (
+    <div style={{maxWidth:'1200px',margin:'0 auto',padding:'20px'}}>
+      <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'30px',fontSize:'14px',flexWrap:'wrap'}}>
+        <Link to="/" style={{color:'#666',textDecoration:'none'}}>Home</Link>
+        <span style={{color:'#999'}}>/</span>
+        <Link to="/products" style={{color:'#666',textDecoration:'none'}}>Products</Link>
+        <span style={{color:'#999'}}>/</span>
+        <span style={{color:'#333',fontWeight:'500'}}>{product.name}</span>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr',gap:'40px',marginBottom:'60px'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:'15px'}}>
+          <div style={{position:'relative',width:'100%',backgroundColor:'#f9f9f9',borderRadius:'12px',overflow:'hidden'}}>
+            <img src={product.images[selectedImage]} alt={product.name} style={{width:'100%',height:'auto',aspectRatio:'1',objectFit:'cover',display:'block'}} />
+            {product.discount > 0 && <div style={{position:'absolute',top:'15px',left:'15px',backgroundColor:'#e91e63',color:'white',padding:'8px 15px',borderRadius:'6px',fontWeight:'bold',fontSize:'14px'}}>{product.discount}% OFF</div>}
           </div>
-          
-          {images.length > 1 && (
-            <div style={styles.thumbnailContainer}>
-              {images.map((img, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  style={{
-                    ...styles.thumbnail,
-                    ...(selectedImage === index ? styles.thumbnailActive : {})
-                  }}
-                >
-                  <img src={img} alt={`${product.name} ${index + 1}`} style={styles.thumbnailImg} />
-                </div>
-              ))}
-            </div>
-          )}
+          <div style={{display:'flex',gap:'10px',overflowX:'auto'}}>
+            {product.images.map((img, index) => (
+              <img key={index} src={img} alt={`View ${index + 1}`} style={{width:'80px',height:'80px',objectFit:'cover',borderRadius:'8px',cursor:'pointer',border:selectedImage === index?'2px solid #e91e63':'2px solid transparent',flexShrink:'0'}} onClick={() => setSelectedImage(index)} />
+            ))}
+          </div>
         </div>
 
-        <div style={styles.detailsSection}>
-          <h1 style={styles.productName}>{product.name}</h1>
+        <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
+          <h1 style={{fontSize:'28px',fontWeight:'bold',color:'#333',margin:'0',lineHeight:'1.3'}}>{product.name}</h1>
           
-          <div style={styles.priceSection}>
-            <span style={styles.price}>₹{product.price.toLocaleString('en-IN')}</span>
-            {product.originalPrice && (
-              <span style={styles.originalPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
+          <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+            <div style={{display:'flex',gap:'2px'}}>
+              {[...Array(5)].map((_, i) => <span key={i} style={{fontSize:'18px',color:i < Math.floor(product.rating)?'#FFD700':'#ddd'}}>★</span>)}
+            </div>
+            <span style={{fontSize:'14px',color:'#666'}}>{product.rating} ({product.reviews} reviews)</span>
+          </div>
+
+          <div style={{display:'flex',alignItems:'center',gap:'15px',flexWrap:'wrap'}}>
+            <span style={{fontSize:'32px',fontWeight:'bold',color:'#e91e63'}}>₹{product.price.toLocaleString('en-IN')}</span>
+            {product.discount > 0 && (
+              <>
+                <span style={{fontSize:'20px',color:'#999',textDecoration:'line-through'}}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
+                <span style={{fontSize:'14px',color:'#4caf50',fontWeight:'500'}}>Save ₹{(product.originalPrice - product.price).toLocaleString('en-IN')}</span>
+              </>
             )}
           </div>
 
-          {product.category && (
-            <div style={styles.category}>
-              <span style={styles.categoryBadge}>{product.category}</span>
-            </div>
-          )}
-
-          <div style={styles.description}>
-            <h3 style={styles.sectionTitle}>Description</h3>
-            <p style={styles.descriptionText}>{product.description}</p>
+          <div style={{fontSize:'14px',fontWeight:'500'}}>
+            {product.stock > 0 ? <span style={{color:'#4caf50'}}>✓ In Stock ({product.stock} available)</span> : <span style={{color:'#f44336'}}>Out of Stock</span>}
           </div>
 
-          {product.materials && (
-            <div style={styles.materials}>
-              <h3 style={styles.sectionTitle}>Materials</h3>
-              <p style={styles.materialsText}>{product.materials}</p>
+          <div style={{paddingTop:'10px',borderTop:'1px solid #eee'}}>
+            <h3 style={{fontSize:'18px',fontWeight:'bold',color:'#333',marginBottom:'10px'}}>Description</h3>
+            <p style={{fontSize:'15px',lineHeight:'1.6',color:'#666',margin:'0'}}>{product.description}</p>
+          </div>
+
+          {product.features && product.features.length > 0 && (
+            <div style={{paddingTop:'10px',borderTop:'1px solid #eee'}}>
+              <h3 style={{fontSize:'18px',fontWeight:'bold',color:'#333',marginBottom:'10px'}}>Features</h3>
+              <ul style={{margin:'0',paddingLeft:'20px'}}>
+                {product.features.map((f, i) => <li key={i} style={{fontSize:'15px',lineHeight:'1.8',color:'#666'}}>{f}</li>)}
+              </ul>
             </div>
           )}
 
-          {product.dimensions && (
-            <div style={styles.dimensions}>
-              <h3 style={styles.sectionTitle}>Dimensions</h3>
-              <p style={styles.dimensionsText}>{product.dimensions}</p>
-            </div>
-          )}
-
-          <div style={styles.quantitySection}>
-            <h3 style={styles.sectionTitle}>Quantity</h3>
-            <div style={styles.quantityControls}>
-              <button 
-                onClick={() => handleQuantityChange(-1)}
-                style={styles.quantityButton}
-                disabled={quantity <= 1}
-              >
-                −
-              </button>
-              <span style={styles.quantityDisplay}>{quantity}</span>
-              <button 
-                onClick={() => handleQuantityChange(1)}
-                style={styles.quantityButton}
-                disabled={quantity >= 10}
-              >
-                +
-              </button>
+          <div style={{paddingTop:'10px',borderTop:'1px solid #eee'}}>
+            <h3 style={{fontSize:'18px',fontWeight:'bold',color:'#333',marginBottom:'10px'}}>Specifications</h3>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:'15px'}}>
+              <div style={{display:'flex',justifyContent:'space-between',padding:'10px',backgroundColor:'#f9f9f9',borderRadius:'6px'}}>
+                <span style={{fontWeight:'500',color:'#666'}}>Category:</span>
+                <span style={{color:'#333'}}>{product.category}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',padding:'10px',backgroundColor:'#f9f9f9',borderRadius:'6px'}}>
+                <span style={{fontWeight:'500',color:'#666'}}>Material:</span>
+                <span style={{color:'#333'}}>{product.material}</span>
+              </div>
+              {product.weight && (
+                <div style={{display:'flex',justifyContent:'space-between',padding:'10px',backgroundColor:'#f9f9f9',borderRadius:'6px'}}>
+                  <span style={{fontWeight:'500',color:'#666'}}>Weight:</span>
+                  <span style={{color:'#333'}}>{product.weight}</span>
+                </div>
+              )}
+              {product.dimensions && (
+                <div style={{display:'flex',justifyContent:'space-between',padding:'10px',backgroundColor:'#f9f9f9',borderRadius:'6px'}}>
+                  <span style={{fontWeight:'500',color:'#666'}}>Dimensions:</span>
+                  <span style={{color:'#333'}}>{product.dimensions}</span>
+                </div>
+              )}
             </div>
           </div>
 
-          <div style={styles.actions}>
-            <button 
-              onClick={handleAddToCart}
-              style={{
-                ...styles.addToCartButton,
-                ...(addedToCart ? styles.addedToCartButton : {})
-              }}
-            >
-              {addedToCart ? '✓ Added to Cart' : 'Add to Cart'}
-            </button>
-            <button 
-              onClick={() => {
-                addToCart(product, quantity);
-                navigate('/cart');
-              }}
-              style={styles.buyNowButton}
-            >
-              Buy Now
-            </button>
+          <div style={{display:'flex',alignItems:'center',gap:'15px'}}>
+            <label style={{fontSize:'16px',fontWeight:'500',color:'#333'}}>Quantity:</label>
+            <div style={{display:'flex',alignItems:'center',gap:'0',border:'2px solid #e0e0e0',borderRadius:'8px',overflow:'hidden'}}>
+              <button style={{padding:'10px 15px',backgroundColor:'white',border:'none',fontSize:'18px',cursor:'pointer',color:'#333'}} onClick={() => quantity > 1 && setQuantity(quantity - 1)} disabled={quantity <= 1}>-</button>
+              <span style={{padding:'10px 20px',borderLeft:'1px solid #e0e0e0',borderRight:'1px solid #e0e0e0',fontSize:'16px',fontWeight:'500',minWidth:'60px',textAlign:'center'}}>{quantity}</span>
+              <button style={{padding:'10px 15px',backgroundColor:'white',border:'none',fontSize:'18px',cursor:'pointer',color:'#333'}} onClick={() => quantity < product.stock && setQuantity(quantity + 1)} disabled={quantity >= product.stock}>+</button>
+            </div>
           </div>
 
-          {product.inStock === false && (
-            <div style={styles.outOfStock}>
-              Currently Out of Stock
-            </div>
-          )}
+          <div style={{display:'flex',gap:'15px',flexWrap:'wrap'}}>
+            <button style={{flex:'1',minWidth:'200px',padding:'15px 30px',backgroundColor:addedToCart?'#4caf50':'#e91e63',color:'white',border:'none',borderRadius:'8px',fontSize:'16px',fontWeight:'600',cursor:product.stock===0?'not-allowed':'pointer',transition:'all 0.3s'}} onClick={handleAddToCart} disabled={product.stock === 0}>{addedToCart ? '✓ Added to Cart' : 'Add to Cart'}</button>
+            <button style={{flex:'1',minWidth:'200px',padding:'15px 30px',backgroundColor:'#333',color:'white',border:'none',borderRadius:'8px',fontSize:'16px',fontWeight:'600',cursor:product.stock===0?'not-allowed':'pointer',transition:'all 0.3s'}} onClick={handleBuyNow} disabled={product.stock === 0}>Buy Now</button>
+          </div>
+
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:'15px',padding:'20px',backgroundColor:'#f9f9f9',borderRadius:'12px'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'10px'}}><span style={{fontSize:'24px'}}>🚚</span><span style={{fontSize:'14px',color:'#666'}}>Free Shipping above ₹500</span></div>
+            <div style={{display:'flex',alignItems:'center',gap:'10px'}}><span style={{fontSize:'24px'}}>↩️</span><span style={{fontSize:'14px',color:'#666'}}>7-day Easy Returns</span></div>
+            <div style={{display:'flex',alignItems:'center',gap:'10px'}}><span style={{fontSize:'24px'}}>✨</span><span style={{fontSize:'14px',color:'#666'}}>100% Handmade</span></div>
+            <div style={{display:'flex',alignItems:'center',gap:'10px'}}><span style={{fontSize:'24px'}}>🔒</span><span style={{fontSize:'14px',color:'#666'}}>Secure Payment</span></div>
+          </div>
         </div>
       </div>
+
+      {relatedProducts.length > 0 && (
+        <div style={{marginTop:'60px'}}>
+          <h2 style={{fontSize:'28px',fontWeight:'bold',textAlign:'center',marginBottom:'30px',color:'#333'}}>You May Also Like</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(250px,1fr))',gap:'20px'}}>
+            {relatedProducts.map(rp => (
+              <Link key={rp.id} to={`/product/${rp.id}`} style={{textDecoration:'none',color:'inherit',border:'1px solid #e0e0e0',borderRadius:'12px',overflow:'hidden',transition:'all 0.3s'}}>
+                <img src={rp.images[0]} alt={rp.name} style={{width:'100%',height:'250px',objectFit:'cover'}} />
+                <div style={{padding:'15px'}}>
+                  <h3 style={{fontSize:'16px',fontWeight:'600',marginBottom:'10px',color:'#333'}}>{rp.name}</h3>
+                  <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                    <span style={{fontSize:'18px',fontWeight:'bold',color:'#e91e63'}}>₹{rp.price.toLocaleString('en-IN')}</span>
+                    {rp.discount > 0 && <span style={{fontSize:'14px',color:'#999',textDecoration:'line-through'}}>₹{rp.originalPrice.toLocaleString('en-IN')}</span>}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
-
-const styles = {
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '20px',
-    minHeight: '70vh',
-  },
-  backLink: {
-    background: 'none',
-    border: 'none',
-    color: '#d4af37',
-    fontSize: '16px',
-    cursor: 'pointer',
-    marginBottom: '20px',
-    padding: '8px 0',
-    fontWeight: '500',
-  },
-  notFound: {
-    textAlign: 'center',
-    padding: '60px 20px',
-  },
-  backButton: {
-    marginTop: '20px',
-    padding: '12px 24px',
-    background: '#d4af37',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: '600',
-  },
-  productContainer: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '40px',
-  },
-  imageSection: {
-    width: '100%',
-  },
-  mainImage: {
-    width: '100%',
-    aspectRatio: '1',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    marginBottom: '16px',
-  },
-  mainImageImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  thumbnailContainer: {
-    display: 'flex',
-    gap: '12px',
-    overflowX: 'auto',
-    padding: '4px 0',
-  },
-  thumbnail: {
-    width: '80px',
-    height: '80px',
-    flexShrink: 0,
-    borderRadius: '4px',
-    overflow: 'hidden',
-    cursor: 'pointer',
-    border: '2px solid transparent',
-    transition: 'border-color 0.2s',
-  },
-  thumbnailActive: {
-    borderColor: '#d4af37',
-  },
-  thumbnailImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  detailsSection: {
-    width: '100%',
-  },
-  productName: {
-    fontSize: '28px',
-    fontWeight: '700',
-    marginBottom: '16px',
-    color: '#333',
-    lineHeight: '1.3',
-  },
-  priceSection: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    marginBottom: '16px',
-  },
-  price: {
-    fontSize: '32px',
-    fontWeight: '700',
-    color: '#d4af37',
-  },
-  originalPrice: {
-    fontSize: '20px',
-    color: '#999',
-    textDecoration: 'line-through',
-  },
-  category: {
-    marginBottom: '24px',
-  },
-  categoryBadge: {
-    display: 'inline-block',
-    padding: '6px 16px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '20px',
-    fontSize: '14px',
-    color: '#666',
-    fontWeight: '500',
-  },
-  description: {
-    marginBottom: '24px',
-    paddingBottom: '24px',
-    borderBottom: '1px solid #e0e0e0',
-  },
-  sectionTitle: {
-    fontSize: '18px',
-    fontWeight: '600',
-    marginBottom: '12px',
-    color: '#333',
-  },
-  descriptionText: {
-    fontSize: '16px',
-    lineHeight: '1.6',
-    color: '#666',
-  },
-  materials: {
-    marginBottom: '24px',
-    paddingBottom: '24px',
-    borderBottom: '1px solid #e0e0e0',
-  },
-  materialsText: {
-    fontSize: '16px',
-    lineHeight: '1.6',
-    color: '#666',
-  },
-  dimensions: {
-    marginBottom: '24px',
-    paddingBottom: '24px',
-    borderBottom: '1px solid #e0e0e0',
-  },
-  dimensionsText: {
-    fontSize: '16px',
-    lineHeight: '1.6',
-    color: '#666',
-  },
-  quantitySection: {
-    marginBottom: '32px',
-  },
-  quantityControls: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-  },
-  quantityButton: {
-    width: '40px',
-    height: '40px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    background: 'white',
-    fontSize: '20px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#333',
-    fontWeight: '600',
-  },
-  quantityDisplay: {
-    fontSize: '18px',
-    fontWeight: '600',
-    minWidth: '40px',
-    textAlign: 'center',
-  },
-  actions: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  addToCartButton: {
-    width: '100%',
-    padding: '16px',
-    backgroundColor: '#d4af37',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '18px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-  },
-  addedToCartButton: {
-    backgroundColor: '#4CAF50',
-  },
-  buyNowButton: {
-    width: '100%',
-    padding: '16px',
-    backgroundColor: '#333',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '18px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-  },
-  outOfStock: {
-    marginTop: '16px',
-    padding: '12px',
-    backgroundColor: '#ffebee',
-    color: '#c62828',
-    textAlign: 'center',
-    borderRadius: '4px',
-    fontWeight: '600',
-  },
-  '@media (min-width: 768px)': {
-    productContainer: {
-      gridTemplateColumns: '1fr 1fr',
-    },
-    actions: {
-      flexDirection: 'row',
-    },
-  },
-};
-
-if (window.matchMedia('(min-width: 768px)').matches) {
-  styles.productContainer.gridTemplateColumns = '1fr 1fr';
-  styles.actions.flexDirection = 'row';
 }
 
 export default ProductDetail;

@@ -1,31 +1,47 @@
+// src/pages/Cart.jsx
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 
 export default function Cart() {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleQuantityChange = (id, newQuantity) => {
-    if (newQuantity < 1) return;
-    updateQuantity(id, newQuantity);
+  const handleQuantityChange = (itemId, newQuantity) => {
+    if (newQuantity < 1) {
+      removeFromCart(itemId);
+    } else {
+      updateQuantity(itemId, newQuantity);
+    }
   };
 
   const handleCheckout = () => {
     navigate('/checkout');
   };
 
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
-      <div style={styles.emptyCart}>
-        <div style={styles.emptyCartContent}>
-          <svg style={styles.emptyCartIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      <div style={styles.emptyContainer}>
+        <div style={styles.emptyContent}>
+          <svg
+            style={styles.emptyIcon}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
           </svg>
-          <h2 style={styles.emptyCartTitle}>Your Cart is Empty</h2>
-          <p style={styles.emptyCartText}>Add some beautiful handmade jewellery to your cart!</p>
-          <Link to="/products" style={styles.shopNowButton}>
-            Browse Products
+          <h2 style={styles.emptyTitle}>Your cart is empty</h2>
+          <p style={styles.emptyText}>
+            Add some beautiful handmade jewellery to your cart
+          </p>
+          <Link to="/products" style={styles.shopButton}>
+            Continue Shopping
           </Link>
         </div>
       </div>
@@ -36,14 +52,30 @@ export default function Cart() {
     <div style={styles.container}>
       <div style={styles.content}>
         <h1 style={styles.title}>Shopping Cart</h1>
+        <p style={styles.itemCount}>
+          {cart.length} {cart.length === 1 ? 'item' : 'items'}
+        </p>
+
         <div style={styles.cartLayout}>
           <div style={styles.itemsSection}>
-            {cartItems.map((item) => (
+            {cart.map((item) => (
               <div key={item.id} style={styles.cartItem}>
-                <img src={item.image} alt={item.name} style={styles.itemImage} />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={styles.itemImage}
+                />
                 <div style={styles.itemDetails}>
                   <h3 style={styles.itemName}>{item.name}</h3>
                   <p style={styles.itemPrice}>₹{item.price.toLocaleString('en-IN')}</p>
+                  {item.selectedSize && (
+                    <p style={styles.itemMeta}>Size: {item.selectedSize}</p>
+                  )}
+                  {item.customization && (
+                    <p style={styles.itemMeta}>Note: {item.customization}</p>
+                  )}
+                </div>
+                <div style={styles.itemActions}>
                   <div style={styles.quantityControl}>
                     <button
                       onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
@@ -61,42 +93,48 @@ export default function Cart() {
                       +
                     </button>
                   </div>
+                  <p style={styles.itemTotal}>
+                    ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+                  </p>
                   <button
                     onClick={() => removeFromCart(item.id)}
                     style={styles.removeButton}
+                    aria-label="Remove item"
                   >
                     Remove
                   </button>
                 </div>
-                <div style={styles.itemTotal}>
-                  <p style={styles.itemTotalPrice}>
-                    ₹{(item.price * item.quantity).toLocaleString('en-IN')}
-                  </p>
-                </div>
               </div>
             ))}
           </div>
+
           <div style={styles.summarySection}>
             <div style={styles.summaryCard}>
               <h2 style={styles.summaryTitle}>Order Summary</h2>
               <div style={styles.summaryRow}>
-                <span style={styles.summaryLabel}>Subtotal</span>
-                <span style={styles.summaryValue}>₹{getCartTotal().toLocaleString('en-IN')}</span>
+                <span>Subtotal</span>
+                <span>₹{getCartTotal().toLocaleString('en-IN')}</span>
               </div>
               <div style={styles.summaryRow}>
-                <span style={styles.summaryLabel}>Shipping</span>
-                <span style={styles.summaryValue}>FREE</span>
+                <span>Shipping</span>
+                <span style={styles.freeShipping}>FREE</span>
               </div>
-              <div style={styles.summaryDivider}></div>
               <div style={styles.summaryRow}>
-                <span style={styles.summaryTotalLabel}>Total</span>
-                <span style={styles.summaryTotalValue}>₹{getCartTotal().toLocaleString('en-IN')}</span>
+                <span style={styles.taxNote}>Tax</span>
+                <span style={styles.taxNote}>Calculated at checkout</span>
+              </div>
+              <div style={styles.divider}></div>
+              <div style={styles.summaryTotal}>
+                <span style={styles.totalLabel}>Total</span>
+                <span style={styles.totalAmount}>
+                  ₹{getCartTotal().toLocaleString('en-IN')}
+                </span>
               </div>
               <button onClick={handleCheckout} style={styles.checkoutButton}>
                 Proceed to Checkout
               </button>
-              <Link to="/products" style={styles.continueShoppingLink}>
-                Continue Shopping
+              <Link to="/products" style={styles.continueLink}>
+                ← Continue Shopping
               </Link>
             </div>
           </div>
@@ -108,9 +146,9 @@ export default function Cart() {
 
 const styles = {
   container: {
-    minHeight: 'calc(100vh - 120px)',
-    padding: '20px',
+    minHeight: 'calc(100vh - 200px)',
     backgroundColor: '#f9f9f9',
+    padding: '20px 16px',
   },
   content: {
     maxWidth: '1200px',
@@ -118,9 +156,14 @@ const styles = {
   },
   title: {
     fontSize: '28px',
-    fontWeight: 'bold',
+    fontWeight: '700',
+    marginBottom: '8px',
+    color: '#1a1a1a',
+  },
+  itemCount: {
+    fontSize: '14px',
+    color: '#666',
     marginBottom: '24px',
-    color: '#333',
   },
   cartLayout: {
     display: 'grid',
@@ -133,31 +176,29 @@ const styles = {
     gap: '16px',
   },
   cartItem: {
-    display: 'flex',
-    gap: '16px',
-    padding: '16px',
     backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    position: 'relative',
+    borderRadius: '12px',
+    padding: '16px',
+    display: 'grid',
+    gridTemplateColumns: '80px 1fr',
+    gap: '16px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
   },
   itemImage: {
-    width: '100px',
-    height: '100px',
+    width: '80px',
+    height: '80px',
     objectFit: 'cover',
     borderRadius: '8px',
-    flexShrink: 0,
   },
   itemDetails: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '4px',
   },
   itemName: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#333',
+    color: '#1a1a1a',
     margin: 0,
   },
   itemPrice: {
@@ -165,165 +206,210 @@ const styles = {
     color: '#666',
     margin: 0,
   },
+  itemMeta: {
+    fontSize: '13px',
+    color: '#888',
+    margin: 0,
+  },
+  itemActions: {
+    gridColumn: '1 / -1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    marginTop: '8px',
+    flexWrap: 'wrap',
+  },
   quantityControl: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    marginTop: '8px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    padding: '4px',
   },
   quantityButton: {
     width: '32px',
     height: '32px',
-    border: '1px solid #ddd',
-    backgroundColor: '#fff',
-    borderRadius: '4px',
-    cursor: 'pointer',
+    border: 'none',
+    backgroundColor: '#f0f0f0',
+    borderRadius: '6px',
     fontSize: '18px',
+    fontWeight: '600',
+    cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: '#333',
     transition: 'background-color 0.2s',
   },
   quantityDisplay: {
-    minWidth: '40px',
+    minWidth: '32px',
     textAlign: 'center',
     fontSize: '16px',
-    fontWeight: '500',
-  },
-  removeButton: {
-    marginTop: '8px',
-    padding: '6px 12px',
-    border: 'none',
-    backgroundColor: 'transparent',
-    color: '#e74c3c',
-    cursor: 'pointer',
-    fontSize: '14px',
-    textAlign: 'left',
-    textDecoration: 'underline',
+    fontWeight: '600',
+    color: '#1a1a1a',
   },
   itemTotal: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
-    minWidth: '80px',
-  },
-  itemTotalPrice: {
     fontSize: '16px',
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: '700',
+    color: '#1a1a1a',
     margin: 0,
+  },
+  removeButton: {
+    fontSize: '14px',
+    color: '#e63946',
+    backgroundColor: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    padding: '4px 8px',
   },
   summarySection: {
     position: 'sticky',
-    top: '80px',
+    top: '90px',
+    height: 'fit-content',
   },
   summaryCard: {
-    padding: '20px',
     backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+    borderRadius: '12px',
+    padding: '24px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
   },
   summaryTitle: {
     fontSize: '20px',
-    fontWeight: 'bold',
-    marginBottom: '16px',
-    color: '#333',
+    fontWeight: '700',
+    marginBottom: '20px',
+    color: '#1a1a1a',
   },
   summaryRow: {
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: '12px',
-  },
-  summaryLabel: {
-    fontSize: '14px',
-    color: '#666',
-  },
-  summaryValue: {
-    fontSize: '14px',
+    fontSize: '15px',
     color: '#333',
-    fontWeight: '500',
   },
-  summaryDivider: {
+  freeShipping: {
+    color: '#28a745',
+    fontWeight: '600',
+  },
+  taxNote: {
+    fontSize: '13px',
+    color: '#888',
+  },
+  divider: {
     height: '1px',
     backgroundColor: '#e0e0e0',
     margin: '16px 0',
   },
-  summaryTotalLabel: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#333',
+  summaryTotal: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '24px',
   },
-  summaryTotalValue: {
+  totalLabel: {
     fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#d4a574',
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  totalAmount: {
+    fontSize: '24px',
+    fontWeight: '700',
+    color: '#e63946',
   },
   checkoutButton: {
     width: '100%',
-    padding: '14px',
-    marginTop: '20px',
+    padding: '16px',
+    backgroundColor: '#e63946',
+    color: '#fff',
     border: 'none',
     borderRadius: '8px',
-    backgroundColor: '#d4a574',
-    color: '#fff',
     fontSize: '16px',
-    fontWeight: 'bold',
+    fontWeight: '600',
     cursor: 'pointer',
+    marginBottom: '12px',
     transition: 'background-color 0.2s',
   },
-  continueShoppingLink: {
+  continueLink: {
     display: 'block',
     textAlign: 'center',
-    marginTop: '12px',
     color: '#666',
-    textDecoration: 'none',
     fontSize: '14px',
+    textDecoration: 'none',
+    marginTop: '12px',
   },
-  emptyCart: {
-    minHeight: 'calc(100vh - 120px)',
+  emptyContainer: {
+    minHeight: 'calc(100vh - 200px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '20px',
+    padding: '40px 16px',
   },
-  emptyCartContent: {
+  emptyContent: {
     textAlign: 'center',
     maxWidth: '400px',
   },
-  emptyCartIcon: {
+  emptyIcon: {
     width: '80px',
     height: '80px',
-    margin: '0 auto 20px',
-    color: '#ccc',
+    color: '#ddd',
+    margin: '0 auto 24px',
   },
-  emptyCartTitle: {
+  emptyTitle: {
     fontSize: '24px',
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: '12px',
-    color: '#333',
+    color: '#1a1a1a',
   },
-  emptyCartText: {
+  emptyText: {
     fontSize: '16px',
     color: '#666',
-    marginBottom: '24px',
+    marginBottom: '32px',
   },
-  shopNowButton: {
+  shopButton: {
     display: 'inline-block',
-    padding: '12px 32px',
-    backgroundColor: '#d4a574',
+    padding: '14px 32px',
+    backgroundColor: '#e63946',
     color: '#fff',
     textDecoration: 'none',
     borderRadius: '8px',
+    fontSize: '16px',
     fontWeight: '600',
     transition: 'background-color 0.2s',
   },
-  '@media (min-width: 768px)': {
+};
+
+if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+  Object.assign(styles, {
+    container: {
+      ...styles.container,
+      padding: '40px 24px',
+    },
+    title: {
+      ...styles.title,
+      fontSize: '36px',
+    },
     cartLayout: {
-      gridTemplateColumns: '2fr 1fr',
+      ...styles.cartLayout,
+      gridTemplateColumns: '1fr 380px',
+    },
+    cartItem: {
+      ...styles.cartItem,
+      gridTemplateColumns: '120px 1fr auto',
+      padding: '24px',
     },
     itemImage: {
+      ...styles.itemImage,
       width: '120px',
       height: '120px',
     },
-  },
-};
+    itemActions: {
+      ...styles.itemActions,
+      gridColumn: 'auto',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      justifyContent: 'flex-start',
+      marginTop: 0,
+    },
+  });
+}

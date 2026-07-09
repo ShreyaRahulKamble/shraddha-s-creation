@@ -1,344 +1,318 @@
+// src/data/products.js
+
 const products = [
   {
     id: 1,
-    name: "Kundan Necklace Set",
+    name: "Elegant Pearl Necklace",
+    description: "Handcrafted pearl necklace with delicate gold-plated chain. Perfect for weddings and special occasions.",
     price: 2499,
-    originalPrice: 3499,
-    category: "necklace",
-    description: "Elegant Kundan necklace set with matching earrings. Perfect for weddings and festive occasions. Handcrafted with precision and attention to detail.",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80",
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80"
-    ],
-    inStock: true,
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop",
+    category: "necklaces",
     featured: true,
-    material: "Kundan, Brass",
-    color: "Gold",
-    weight: "45g"
+    inStock: true,
+    materials: ["Pearls", "Gold-plated brass"],
+    dimensions: "16-18 inches adjustable"
   },
   {
     id: 2,
-    name: "Oxidized Silver Jhumkas",
-    price: 599,
-    originalPrice: 899,
+    name: "Rose Gold Teardrop Earrings",
+    description: "Beautiful teardrop earrings with rose gold finish and crystal accents. Lightweight and comfortable for all-day wear.",
+    price: 899,
+    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop",
     category: "earrings",
-    description: "Beautiful oxidized silver jhumka earrings with intricate traditional design. Lightweight and comfortable for all-day wear.",
-    images: [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80",
-      "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800&q=80"
-    ],
-    inStock: true,
     featured: true,
-    material: "Oxidized Silver",
-    color: "Silver",
-    weight: "12g"
+    inStock: true,
+    materials: ["Rose gold-plated copper", "Crystals"],
+    dimensions: "1.5 inches length"
   },
   {
     id: 3,
-    name: "Pearl Bracelet",
-    price: 899,
-    originalPrice: 1299,
-    category: "bracelet",
-    description: "Delicate pearl bracelet with adjustable clasp. Adds elegance to any outfit. Made with genuine freshwater pearls.",
-    images: [
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80",
-      "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&q=80"
-    ],
+    name: "Boho Beaded Bracelet Set",
+    description: "Set of 3 handmade beaded bracelets with natural stones and wooden beads. Bohemian style perfect for everyday wear.",
+    price: 649,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
+    featured: true,
     inStock: true,
-    featured: false,
-    material: "Freshwater Pearls, Silver",
-    color: "White & Silver",
-    weight: "8g"
+    materials: ["Natural stones", "Wooden beads", "Elastic cord"],
+    dimensions: "7 inches (stretchable)"
   },
   {
     id: 4,
-    name: "Temple Jewellery Choker",
-    price: 3499,
-    originalPrice: 4999,
-    category: "necklace",
-    description: "Traditional South Indian temple jewellery choker with Lakshmi motif. Antique gold finish with ruby and emerald stones.",
-    images: [
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80"
-    ],
+    name: "Vintage Coin Statement Necklace",
+    description: "Bold statement necklace featuring antique-finish coin charms. Makes a striking addition to any outfit.",
+    price: 1799,
+    image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=500&h=500&fit=crop",
+    category: "necklaces",
+    featured: false,
     inStock: true,
-    featured: true,
-    material: "Brass, Stones",
-    color: "Antique Gold",
-    weight: "65g"
+    materials: ["Antique brass", "Metal coins"],
+    dimensions: "18 inches + 2 inch extender"
   },
   {
     id: 5,
-    name: "Meenakari Bangles Set",
-    price: 1499,
-    originalPrice: 2199,
-    category: "bangles",
-    description: "Set of 4 colorful Meenakari bangles with traditional enamel work. Vibrant colors and intricate patterns.",
-    images: [
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80",
-      "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Minimalist Hoop Earrings",
+    description: "Classic gold hoop earrings with hammered texture. Simple yet elegant design suitable for any occasion.",
+    price: 599,
+    image: "https://images.unsplash.com/photo-1628530982452-1bb171e9db92?w=500&h=500&fit=crop",
+    category: "earrings",
     featured: false,
-    material: "Brass, Enamel",
-    color: "Multicolor",
-    weight: "80g"
+    inStock: true,
+    materials: ["Gold-plated brass"],
+    dimensions: "1 inch diameter"
   },
   {
     id: 6,
-    name: "Polki Diamond Studs",
-    price: 1899,
-    originalPrice: 2699,
-    category: "earrings",
-    description: "Classic Polki diamond stud earrings. Small and elegant, perfect for daily wear or special occasions.",
-    images: [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80",
-      "https://images.unsplash.com/photo-1590927852610-34b78f99e114?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Turquoise Stone Pendant Necklace",
+    description: "Genuine turquoise stone set in silver-toned metal. Each stone is unique with natural variations.",
+    price: 1299,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "necklaces",
     featured: true,
-    material: "Polki, Gold Plated",
-    color: "Gold",
-    weight: "6g"
+    inStock: true,
+    materials: ["Turquoise stone", "Silver-plated brass"],
+    dimensions: "20 inches chain with 2 inch pendant"
   },
   {
     id: 7,
-    name: "Chandbali Earrings",
-    price: 1299,
-    originalPrice: 1899,
+    name: "Crystal Chandelier Earrings",
+    description: "Glamorous chandelier earrings with sparkling crystals. Perfect for parties and formal events.",
+    price: 1499,
+    image: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=500&h=500&fit=crop",
     category: "earrings",
-    description: "Crescent moon shaped Chandbali earrings with pearl drops. Traditional Mughal design with modern appeal.",
-    images: [
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80",
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80"
-    ],
-    inStock: true,
     featured: false,
-    material: "Gold Plated, Pearls",
-    color: "Gold & White",
-    weight: "18g"
+    inStock: true,
+    materials: ["Crystals", "Silver-plated metal"],
+    dimensions: "2.5 inches length"
   },
   {
     id: 8,
-    name: "Navratna Ring",
+    name: "Leather Wrap Bracelet",
+    description: "Multi-wrap leather bracelet with metal beads and magnetic clasp. Unisex design with rustic charm.",
     price: 799,
-    originalPrice: 1199,
-    category: "rings",
-    description: "Traditional Navratna ring featuring nine precious stones. Believed to bring good fortune and prosperity.",
-    images: [
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
     featured: false,
-    material: "Silver, Nine Stones",
-    color: "Multicolor",
-    weight: "5g"
+    inStock: true,
+    materials: ["Genuine leather", "Metal beads"],
+    dimensions: "Adjustable, wraps 2-3 times"
   },
   {
     id: 9,
-    name: "Antique Gold Necklace",
-    price: 4299,
-    originalPrice: 5999,
-    category: "necklace",
-    description: "Long antique gold necklace with coin pendants. Traditional design suitable for ethnic wear and celebrations.",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80",
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80"
-    ],
+    name: "Gold Chain Layered Necklace",
+    description: "Trendy layered necklace set with three delicate gold chains of varying lengths. Can be worn together or separately.",
+    price: 1899,
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop",
+    category: "necklaces",
+    featured: false,
     inStock: true,
-    featured: true,
-    material: "Brass, Antique Finish",
-    color: "Antique Gold",
-    weight: "95g"
+    materials: ["Gold-plated stainless steel"],
+    dimensions: "14, 16, 18 inches"
   },
   {
     id: 10,
-    name: "Crystal Drop Earrings",
-    price: 699,
-    originalPrice: 999,
+    name: "Stud Earrings Collection",
+    description: "Set of 5 pairs of stud earrings in various designs. Perfect starter set or gift option.",
+    price: 999,
+    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop",
     category: "earrings",
-    description: "Modern crystal drop earrings with sparkling stones. Perfect for parties and evening wear.",
-    images: [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
     featured: false,
-    material: "Crystal, Alloy",
-    color: "Silver",
-    weight: "10g"
+    inStock: true,
+    materials: ["Mixed metals", "Crystals", "Pearls"],
+    dimensions: "Various sizes (5mm-8mm)"
   },
   {
     id: 11,
-    name: "Kada Bracelet",
-    price: 1699,
-    originalPrice: 2299,
-    category: "bracelet",
-    description: "Bold gold-plated Kada bracelet with carved patterns. Statement piece for ethnic and fusion outfits.",
-    images: [
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Charm Bracelet with Heart Pendant",
+    description: "Delicate chain bracelet with heart charm and adjustable clasp. Sweet and feminine design.",
+    price: 549,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
     featured: false,
-    material: "Gold Plated Brass",
-    color: "Gold",
-    weight: "35g"
+    inStock: true,
+    materials: ["Silver-plated brass"],
+    dimensions: "7-8 inches adjustable"
   },
   {
     id: 12,
-    name: "Peacock Design Necklace",
-    price: 2999,
-    originalPrice: 4199,
-    category: "necklace",
-    description: "Stunning peacock design necklace with colorful stone work. Inspired by South Indian temple art.",
-    images: [
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80"
-    ],
-    inStock: false,
+    name: "Black Onyx Statement Necklace",
+    description: "Bold necklace featuring large black onyx stones. Modern and sophisticated piece that makes a statement.",
+    price: 2199,
+    image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=500&h=500&fit=crop",
+    category: "necklaces",
     featured: false,
-    material: "Brass, Stones",
-    color: "Green & Gold",
-    weight: "55g"
+    inStock: false,
+    materials: ["Black onyx stones", "Brass"],
+    dimensions: "16 inches + 3 inch extender"
   },
   {
     id: 13,
-    name: "Layered Chain Necklace",
-    price: 1199,
-    originalPrice: 1699,
-    category: "necklace",
-    description: "Modern layered chain necklace with delicate pendants. Minimalist design for everyday elegance.",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80",
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Feather Drop Earrings",
+    description: "Lightweight feather-shaped earrings with metallic finish. Bohemian style perfect for festival season.",
+    price: 699,
+    image: "https://images.unsplash.com/photo-1628530982452-1bb171e9db92?w=500&h=500&fit=crop",
+    category: "earrings",
     featured: false,
-    material: "Gold Plated",
-    color: "Gold",
-    weight: "15g"
+    inStock: true,
+    materials: ["Metal alloy", "Enamel coating"],
+    dimensions: "2 inches length"
   },
   {
     id: 14,
-    name: "Ruby Stone Bangles",
-    price: 1999,
-    originalPrice: 2799,
-    category: "bangles",
-    description: "Set of 2 bangles with embedded ruby stones. Rich gold finish with traditional craftsmanship.",
-    images: [
-      "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Crystal Bangle Set",
+    description: "Set of 3 bangles with embedded crystals. Stackable design that catches the light beautifully.",
+    price: 1399,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
     featured: false,
-    material: "Brass, Ruby Stones",
-    color: "Gold & Red",
-    weight: "60g"
+    inStock: true,
+    materials: ["Crystals", "Gold-plated metal"],
+    dimensions: "2.6 inch diameter"
   },
   {
     id: 15,
-    name: "Silver Toe Rings",
-    price: 399,
-    originalPrice: 599,
-    category: "rings",
-    description: "Pair of traditional silver toe rings with carved patterns. Adjustable and comfortable fit.",
-    images: [
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
+    name: "Moonstone Pendant Necklace",
+    description: "Ethereal moonstone pendant with silver chain. The stone displays a beautiful adularescence effect.",
+    price: 1699,
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop",
+    category: "necklaces",
+    featured: true,
     inStock: true,
-    featured: false,
-    material: "Silver",
-    color: "Silver",
-    weight: "4g"
+    materials: ["Moonstone", "Sterling silver"],
+    dimensions: "18 inches chain with 0.8 inch pendant"
   },
   {
     id: 16,
-    name: "Floral Maang Tikka",
-    price: 899,
-    originalPrice: 1299,
-    category: "maangtikka",
-    description: "Delicate floral design maang tikka with pearl drop. Essential bridal and festive accessory.",
-    images: [
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Geometric Dangle Earrings",
+    description: "Modern geometric design with mixed metal finish. Lightweight and contemporary style.",
+    price: 849,
+    image: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=500&h=500&fit=crop",
+    category: "earrings",
     featured: false,
-    material: "Gold Plated, Pearl",
-    color: "Gold & White",
-    weight: "10g"
+    inStock: true,
+    materials: ["Brass", "Copper"],
+    dimensions: "1.8 inches length"
   },
   {
     id: 17,
-    name: "Beaded Anklet",
-    price: 549,
-    originalPrice: 799,
-    category: "anklet",
-    description: "Colorful beaded anklet with ghungroo bells. Traditional and playful design.",
-    images: [
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Macrame Friendship Bracelet",
+    description: "Handwoven macrame bracelet with adjustable sliding knot. Available in multiple color combinations.",
+    price: 399,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
     featured: false,
-    material: "Beads, Silver",
-    color: "Multicolor",
-    weight: "20g"
+    inStock: true,
+    materials: ["Waxed cord", "Metal beads"],
+    dimensions: "Adjustable 6-9 inches"
   },
   {
     id: 18,
-    name: "Statement Ring",
-    price: 1099,
-    originalPrice: 1599,
-    category: "rings",
-    description: "Bold statement ring with large central stone. Contemporary design with traditional elements.",
-    images: [
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Vintage Locket Necklace",
+    description: "Antique-style oval locket that opens to hold photos. Romantic and timeless piece with intricate engraving.",
+    price: 1599,
+    image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=500&h=500&fit=crop",
+    category: "necklaces",
     featured: false,
-    material: "Brass, Stone",
-    color: "Gold",
-    weight: "12g"
+    inStock: true,
+    materials: ["Brass with antique finish"],
+    dimensions: "22 inches chain with 1 inch locket"
   },
   {
     id: 19,
-    name: "Bridal Choker Set",
-    price: 5999,
-    originalPrice: 8499,
-    category: "necklace",
-    description: "Complete bridal choker set with necklace, earrings, and maang tikka. Stunning Kundan and pearl work.",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80",
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Pearl Stud Earrings",
+    description: "Classic freshwater pearl studs with gold posts. Timeless elegance for everyday wear.",
+    price: 749,
+    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop",
+    category: "earrings",
     featured: true,
-    material: "Kundan, Pearl, Brass",
-    color: "Gold & White",
-    weight: "120g"
+    inStock: true,
+    materials: ["Freshwater pearls", "Gold-plated posts"],
+    dimensions: "7mm pearls"
   },
   {
     id: 20,
-    name: "Minimalist Hoops",
-    price: 449,
-    originalPrice: 699,
-    category: "earrings",
-    description: "Simple gold-plated hoop earrings. Versatile and comfortable for daily wear.",
-    images: [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80",
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=800&q=80"
-    ],
-    inStock: true,
+    name: "Evil Eye Protection Bracelet",
+    description: "Traditional evil eye charm bracelet with blue glass beads. Believed to bring protection and good luck.",
+    price: 599,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
     featured: false,
-    material: "Gold Plated",
-    color: "Gold",
-    weight: "5g"
+    inStock: true,
+    materials: ["Glass beads", "Gold-plated chain"],
+    dimensions: "7 inches + 1 inch extender"
+  },
+  {
+    id: 21,
+    name: "Tassel Statement Necklace",
+    description: "Colorful tassel necklace with beaded detail. Fun and vibrant piece perfect for summer outfits.",
+    price: 1299,
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop",
+    category: "necklaces",
+    featured: false,
+    inStock: true,
+    materials: ["Silk tassels", "Glass beads", "Metal chain"],
+    dimensions: "20 inches with 3 inch tassel"
+  },
+  {
+    id: 22,
+    name: "Minimalist Bar Earrings",
+    description: "Sleek vertical bar earrings in brushed gold finish. Perfect for professional and casual settings.",
+    price: 649,
+    image: "https://images.unsplash.com/photo-1628530982452-1bb171e9db92?w=500&h=500&fit=crop",
+    category: "earrings",
+    featured: false,
+    inStock: true,
+    materials: ["Gold-plated stainless steel"],
+    dimensions: "1.2 inches length"
+  },
+  {
+    id: 23,
+    name: "Rose Quartz Healing Bracelet",
+    description: "Natural rose quartz beads on elastic cord. Known as the stone of love and emotional healing.",
+    price: 899,
+    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
+    category: "bracelets",
+    featured: false,
+    inStock: true,
+    materials: ["Rose quartz", "Elastic cord"],
+    dimensions: "7 inches (stretchable)"
+  },
+  {
+    id: 24,
+    name: "Infinity Symbol Necklace",
+    description: "Delicate infinity pendant symbolizing eternal love. Simple and meaningful gift option.",
+    price: 799,
+    image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=500&h=500&fit=crop",
+    category: "necklaces",
+    featured: false,
+    inStock: true,
+    materials: ["Sterling silver"],
+    dimensions: "16 inches + 2 inch extender"
   }
 ];
+
+export const categories = [
+  { id: "all", name: "All Products" },
+  { id: "necklaces", name: "Necklaces" },
+  { id: "earrings", name: "Earrings" },
+  { id: "bracelets", name: "Bracelets" }
+];
+
+export const getFeaturedProducts = () => {
+  return products.filter(product => product.featured);
+};
+
+export const getProductById = (id) => {
+  return products.find(product => product.id === parseInt(id));
+};
+
+export const getProductsByCategory = (category) => {
+  if (category === "all") return products;
+  return products.filter(product => product.category === category);
+};
+
+export const getInStockProducts = () => {
+  return products.filter(product => product.inStock);
+};
 
 export default products;
