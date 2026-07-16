@@ -1,10 +1,10 @@
 // src/pages/Cart.jsx
-import { useContext } from 'react';
+import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
+
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const navigate = useNavigate();
 
   const handleQuantityChange = (itemId, newQuantity) => {
