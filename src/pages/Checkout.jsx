@@ -2,7 +2,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { initiatePayment } from '../utils/razorpay';
+import { initiateRazorpayPayment } from '../utils/razorpay';
 
 function Checkout() {
   const navigate = useNavigate();
