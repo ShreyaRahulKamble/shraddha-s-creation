@@ -1,5 +1,5 @@
 // src/data/products.js
-import products from '../data/products';
+
 const products = [
   {
     id: 1,
