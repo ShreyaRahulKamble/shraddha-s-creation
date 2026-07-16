@@ -1,7 +1,7 @@
 // src/pages/Checkout.jsx
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
+import { useCart } from '../context/CartContext';
 import { initiatePayment } from '../utils/razorpay';
 
 function Checkout() {
